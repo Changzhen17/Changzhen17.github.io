@@ -1,0 +1,154 @@
+1、二叉树的种类
+1.1、满二叉树
+    深度为k，有2^k-1个节点的二叉树。
+1.2、完全二叉树
+    除了最底层节点可能没填满外，其余每层节点数都达到最大值，并且最下面一层的节点都集中在该层最左边的若干位置。
+1.3、二叉搜索树
+    二叉树的中序遍历
+1.4、平衡二叉搜索树
+    又被称为AVL（Adelson-Velsky and Landis）树，且具有以下性质：它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。
+    
+2、二叉树的存储方式：
+    链式存储：
+    * struct TreeNode {
+    *     int val;
+    *     TreeNode *left;
+    *     TreeNode *right;
+    *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+    * };
+    数组存储：前序遍历、中序遍历、后续遍历
+    
+3、二叉树的遍历
+3.1、递归遍历
+3.1.1、前序遍历（根左右）
+class Solution {
+public:
+    vector<int> retult;
+    void dfs(TreeNode* root){
+        if(root==nullptr){
+            return root;
+        }
+        result.push_back(root-val);
+        preorderTraversal(root->left);
+        preorderTraversal(root->right);
+    }
+    vector<int> preorderTraversal(TreeNode* root){
+        dfs(root);
+        return result;
+    }
+};
+3.1.2、中序遍历（左根右）
+class Solution {
+public:
+    vector<int> retult;
+    void dfs(TreeNode* root){
+        if(root==nullptr){
+            return root;
+        }
+        preorderTraversal(root->left);
+        result.push_back(root-val);
+        preorderTraversal(root->right);
+    }
+    vector<int> midorderTraversal(TreeNode* root){
+        dfs(root);
+        return result;
+    }
+};
+3.1.3、后序遍历（左右根）
+class Solution {
+public:
+    vector<int> retult;
+    void dfs(TreeNode* root){
+        if(root==nullptr){
+            return root;
+        }
+        preorderTraversal(root->left);
+        preorderTraversal(root->right);
+        result.push_back(root-val);
+    }
+    vector<int> aftorderTraversal(TreeNode* root){
+        dfs(root);
+        return result;
+    }
+};
+3.1、非递归遍历
+3.1.1、前序遍历（根左右）
+class Solution{
+public:
+    vector<int> preorderTraversal{
+        vector<int> result;
+        stack<TreeNode*> st;
+        if(root!=nullptr){
+            st.push(root);
+        }
+        while(!st.empty()){
+            TreeNode* node = st.top();
+            if(node){
+                st.pop();
+                if(node->right) st.push(node->right);
+                if(node->left) st.push(node->left);
+                st.push(node);
+                st.push(nullptr);
+            }else{
+                st.pop();
+                node = st.top();
+                st.pop();
+                result.push_back(node->val);
+            }
+        }
+    }
+};
+3.1.2、中序遍历（左根右）
+class Solution{
+public:
+    vector<int> preorderTraversal{
+        vector<int> result;
+        stack<TreeNode*> st;
+        if(root!=nullptr){
+            st.push(root);
+        }
+        while(!st.empty()){
+            TreeNode* node = st.top();
+            if(node){
+                st.pop();
+                if(node->right) st.push(node->right);
+                st.push(node);
+                st.push(nullptr);
+                if(node->left) st.push(node->left);
+            }else{
+                st.pop();
+                node = st.top();
+                st.pop();
+                result.push_back(node->val);
+            }
+        }
+    }
+};
+3.1.3、后序遍历（左右根）
+class Solution{
+public:
+    vector<int> preorderTraversal{
+        vector<int> result;
+        stack<TreeNode*> st;
+        if(root!=nullptr){
+            st.push(root);
+        }
+        while(!st.empty()){
+            TreeNode* node = st.top();
+            if(node){
+                st.pop();
+                st.push(node);
+                st.push(nullptr);
+                if(node->right) st.push(node->right);
+                if(node->left) st.push(node->left);
+            }else{
+                st.pop();
+                node = st.top();
+                st.pop();
+                result.push_back(node->val);
+            }
+        }
+    }
+};
