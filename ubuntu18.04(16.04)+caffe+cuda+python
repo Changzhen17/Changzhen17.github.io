@@ -1,0 +1,56 @@
+针对ubuntu18.04或者ubuntu16.04 + caffe + CUDA(也可以有cudnn) + python接口的编译配置问题
+    
+    #安装依赖库
+    #sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev
+    #sudo apt-get install libhdf5-serial-dev protobuf-compiler
+    #sudo apt-get install --no-install-recommends libboost-all-dev
+    #sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev
+    #sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev
+    #
+    #cd /home/xxx/       //此目录为工作目录，可自由指定
+    #
+    #git clone https://github.com/BVLC/caffe.git
+    #
+    #sudo cp Makefile.config.example Makefile.config
+    #
+    #sudo vim Makefile.config  //修改内容如下：
+    #1.将# USE_CUDNN := 1   //如果安装了cuda对应的cudnn
+    #  改  USE_CUDNN := 1
+    #2.将# OPENCV_VERSION := 3  //建议安装opencv，否则编译会出现各种各样问题
+    #  改  OPENCV_VERSION := 3
+    #3.将# WITH_PYTHON_LAYER := 1  //使用python，如果使用anaconda，修改相应的位置即可
+    #  改  WITH_PYTHON_LAYER := 1
+    #4.将  INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include
+           LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib
+    #  改  INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include /usr/include/hdf5/serial
+           LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/hdf5/serial
+    #5.将compute_20去掉
+    #
+    #sudo vim Makefile  //修改内容如下：
+    #1.将  NVCCFLAGS +=-ccbin=$(CXX) -Xcompiler-fPIC $(COMMON_FLAGS)
+    #  改  NVCCFLAGS += -D_FORCE_INLINES -ccbin=$(CXX) -Xcompiler -fPIC $(COMMON_FLAGS)
+    #2.将  LIBRARIES += glog gflags protobuf boost_system boost_filesystem m
+    #  改  LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_hl hdf5
+    #
+    #cd /home/xxx/caffe-master
+    #
+    #sudo make clean
+    #
+    #sudo make all
+    #
+    #sudo make test
+    #
+    #sudo make runtest
+    #
+    #下载python所需要的依赖包在/home/xxx/caffe-master/python/requirements.txt中，使用下列命令：pip install 包名
+    #
+    #sudo make pycaffe
+    #
+    #关于配置python接口问题
+    #1.sudo vim ~/.bashrc
+    #2.增加export PYTHONPATH=/home/xxx/caffe-master/python:$PYTHONPATH
+    #3.source ~/.bashrc
+    #
+    #至此caffe的python接口安装完毕
+    #
+可以在python程序中使用import python。    ^~^！！！！
