@@ -53,4 +53,4 @@
     #
     #至此caffe的python接口安装完毕
     #
-可以在python程序中使用import python。    ^~^！！！！
+然后就可以在python程序中使用import python。    ^~^！！！！
